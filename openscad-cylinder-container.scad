@@ -83,7 +83,7 @@ bottom_height = 30; // [10:255]
 
 module __Customizer_Limit__ () {}
 
-$fn = $preview ? 32 : 64;
+$fn = $preview ? 32 : 128;
 
 // Main rendering logic
 if (render_part == "both") {
@@ -100,32 +100,31 @@ if (render_part == "both") {
 module container_bottom () {
     // Container
     union () {
-        difference () {
-            translate([0, 0, wall_thickness])
-                difference () {
-                    // Outer cylinder
-                    cylinder(h=bottom_height, d=(internal_diameter + ((2 * 2) * wall_thickness)));
+        translate([0, 0, wall_thickness])
+            difference () {
+                // Outer cylinder
+                cylinder(h=bottom_height, d=(internal_diameter + ((2 * 2) * wall_thickness)));
 
-                    // Internal thread cutout
-                    translate([0, 0, (bottom_height - thread_height)])
-                        difference () {
-                            cylinder(h=thread_height, d=(internal_diameter + ((2 * 2) * wall_thickness)));
+                // Internal thread cutout
+                translate([0, 0, (bottom_height - thread_height)])
+                    difference () {
+                        cylinder(h=thread_height, d=(internal_diameter + ((2 * 2) * wall_thickness)));
 
-                            ScrewThread(
-                                outer_diam=(internal_diameter + (2 * wall_thickness)),
-                                height=thread_height,
-                                pitch=thread_pitch,
-                                tooth_angle=thread_angle,
-                                tolerance=(thread_tolerance * -1)
-                            );
-                        }
-                }
+                        ScrewThread(
+                            outer_diam=(internal_diameter + (2 * wall_thickness)),
+                            height=thread_height,
+                            pitch=thread_pitch,
+                            tooth_angle=thread_angle,
+                            tolerance=(thread_tolerance * -1)
+                        );
+                    }
 
                 // Cylinder holes
                 if (render_holes) {
                     union () {
                         // Partial internal cavity
-                        cylinder(h=thread_height, d=internal_diameter);
+                        translate([0, 0, bottom_height - thread_height + wall_thickness])
+                            cylinder(h=thread_height, d=internal_diameter);
 
                         // Holes in base
                         for (i = [0 : hole_count - 1]) {
@@ -141,7 +140,7 @@ module container_bottom () {
                 else {
                     cylinder(h=(bottom_height + wall_thickness), d=internal_diameter);
                 }
-        }
+            }
 
         // Rounded edges
         _container_rounded_base();
