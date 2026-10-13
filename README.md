@@ -1,5 +1,5 @@
-# OpenSCAD Cylinder Container
+# openscad-cylinder-container
 
 Parametric cylinder container
 
-> NOTE: Knurling does not display in preview mode. It will render with the model if turned on
+> NOTE: Knurling and threads do not display in preview mode. It will render with the model
